@@ -13,10 +13,10 @@ namespace ToyMapReduce.examples
             return new KeyValuePair<object, object>(Values[0].Trim(), Values[1].Trim());
         }
 
-        public override void map(KeyValuePair<object, object> KVPair)
+        public override KeyValuePair<string, string> map(KeyValuePair<object, object> KVPair)
         {
             string Value = (string)KVPair.Value;
-            addMap("all", Value.Substring(0, Value.Length - 10));
+            return new KeyValuePair<string, string>("all", Value.Substring(0, Value.Length - 10));
         }
 
         public override void reduce(string Key, List<string> Values)

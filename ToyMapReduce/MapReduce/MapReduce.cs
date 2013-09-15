@@ -59,7 +59,8 @@ namespace ToyMapReduce.MapReduce
                 StreamReader sr = new StreamReader(Path);
                 while (!sr.EndOfStream)
                 {
-                    map(preprocess(sr.ReadLine()));
+                    KeyValuePair<KMap, VMap> KVPair = map(preprocess(sr.ReadLine()));
+                    addMap(KVPair.Key, KVPair.Value);
                 }
             }
             catch (Exception e) { Console.WriteLine(e.Message); }
@@ -78,7 +79,7 @@ namespace ToyMapReduce.MapReduce
         /// <param name="data">String data</param>
         /// <returns>Returns KeyValuePair, where key is the first column of data and value is next columns</returns>
         abstract public KeyValuePair<object, object> preprocess(string data);
-        abstract public void map(KeyValuePair<object, object> KVPair);
+        abstract public KeyValuePair<KMap, VMap> map(KeyValuePair<object, object> KVPair);
         abstract public void reduce(KMap Key, List<VMap> Values);
     }
 }
