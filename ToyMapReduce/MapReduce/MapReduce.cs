@@ -22,7 +22,7 @@ namespace ToyMapReduce.MapReduce
         /// <param name="Key">Key for mapping</param>
         /// <param name="Value">Value for mapping</param>
         /// <returns>Returns true if the key doesn't exist and is adding, false otherwise</returns>
-        public bool addMap(KMap Key, VMap Value)
+        private bool addMap(KMap Key, VMap Value)
         {
             if (!intermediate.ContainsKey(Key))
             {
@@ -43,7 +43,7 @@ namespace ToyMapReduce.MapReduce
         /// </summary>
         /// <param name="Key">Reduced key</param>
         /// <param name="Value">Reduced value</param>
-        public void addReduce(KReduce Key, VReduce Value )
+        private void addReduce(KReduce Key, VReduce Value )
         {
             output.Add(Key, Value);
         }
@@ -59,13 +59,17 @@ namespace ToyMapReduce.MapReduce
                 StreamReader sr = new StreamReader(Path);
                 while (!sr.EndOfStream)
                 {
-                    KeyValuePair<KMap, VMap> KVPair = map(preprocess(sr.ReadLine()));
-                    addMap(KVPair.Key, KVPair.Value);
+                    KeyValuePair<KMap, VMap> KVMapPair = map(preprocess(sr.ReadLine()));
+                    addMap(KVMapPair.Key, KVMapPair.Value);
                 }
             }
             catch (Exception e) { Console.WriteLine(e.Message); }
 
-            foreach (KeyValuePair<KMap, List<VMap>> KVPair in intermediate) reduce(KVPair.Key, KVPair.Value);
+            foreach (KeyValuePair<KMap, List<VMap>> KVPair in intermediate)
+            {
+                KeyValuePair<KReduce, VReduce> KVReducePair = reduce(KVPair.Key, KVPair.Value);
+                addReduce(KVReducePair.Key, KVReducePair.Value);
+            }
         }
 
         public Dictionary<KReduce, VReduce> KeyValDictionary
@@ -80,6 +84,6 @@ namespace ToyMapReduce.MapReduce
         /// <returns>Returns KeyValuePair, where key is the first column of data and value is next columns</returns>
         abstract public KeyValuePair<object, object> preprocess(string data);
         abstract public KeyValuePair<KMap, VMap> map(KeyValuePair<object, object> KVPair);
-        abstract public void reduce(KMap Key, List<VMap> Values);
+        abstract public KeyValuePair<KReduce, VReduce> reduce(KMap Key, List<VMap> Values);
     }
 }

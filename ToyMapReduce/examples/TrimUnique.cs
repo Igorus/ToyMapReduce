@@ -19,10 +19,10 @@ namespace ToyMapReduce.examples
             return new KeyValuePair<string, string>("all", Value.Substring(0, Value.Length - 10));
         }
 
-        public override void reduce(string Key, List<string> Values)
+        public override KeyValuePair<string, int> reduce(string Key, List<string> Values)
         {
             HashSet<string> ReducedValues = new HashSet<string>(Values);
-            addReduce("unique trims", ReducedValues.Count);
+            return new KeyValuePair<string, int>("unique trims", ReducedValues.Count);
         }
     }
 }
