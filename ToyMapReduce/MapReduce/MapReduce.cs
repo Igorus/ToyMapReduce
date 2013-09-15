@@ -71,6 +71,7 @@ namespace ToyMapReduce.MapReduce
         {
             get { return output; }
         }
+
         /// <summary>
         /// Preprocessing data
         /// </summary>
