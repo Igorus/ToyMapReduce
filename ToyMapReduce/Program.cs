@@ -16,6 +16,12 @@ namespace ToyMapReduce
             foreach(KeyValuePair<string, int> KVPair in TrimProblem.KeyValDictionary) 
                 Console.WriteLine(KVPair.Key + ": " + KVPair.Value.ToString());
             Console.ReadLine();
+
+            WineAcidity RedWine = new WineAcidity();
+            RedWine.execute("../../examples/winequality-red.csv");
+            foreach (KeyValuePair<int, double> KVPair in RedWine.KeyValDictionary)
+                Console.WriteLine(KVPair.Key + ": " + KVPair.Value.ToString());
+            Console.ReadLine();
         }
     }
 }

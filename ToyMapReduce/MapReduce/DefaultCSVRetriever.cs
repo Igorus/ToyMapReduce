@@ -14,7 +14,7 @@ namespace ToyMapReduce.MapReduce
             StreamReader sr = new StreamReader(Path);
             while (!sr.EndOfStream)
             {
-                string[] Values = sr.ReadLine().Split(',');
+                string[] Values = sr.ReadLine().Split(',', ';');
                 yield return new KeyValuePair<object, object>(Values[0].Trim(), Values[1].Trim());
             }
             sr.Close();

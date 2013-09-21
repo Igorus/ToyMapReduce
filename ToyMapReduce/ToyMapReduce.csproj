@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="examples\TrimUnique.cs" />
+    <Compile Include="examples\WineAcidity.cs" />
     <Compile Include="MapReduce\DefaultCSVRetriever.cs" />
     <Compile Include="MapReduce\IRetriever.cs" />
     <Compile Include="MapReduce\MapReduce.cs" />

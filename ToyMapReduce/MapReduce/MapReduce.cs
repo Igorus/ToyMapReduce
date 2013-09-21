@@ -10,7 +10,7 @@ namespace ToyMapReduce.MapReduce
     {
         private Dictionary<KMap, List<VMap>> intermediate;
         private Dictionary<KReduce, VReduce> output;
-        private IRetriever retriever;
+        public IRetriever retriever;
 
         public Dictionary<KReduce, VReduce> KeyValDictionary { get { return output; } }
 
