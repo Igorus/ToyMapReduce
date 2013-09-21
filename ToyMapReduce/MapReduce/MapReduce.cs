@@ -1,7 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Collections;
+using System.Threading;
 
 namespace ToyMapReduce.MapReduce
 {
@@ -9,9 +10,15 @@ namespace ToyMapReduce.MapReduce
     {
         private Dictionary<KMap, List<VMap>> intermediate;
         private Dictionary<KReduce, VReduce> output;
+        private IRetriever retriever;
 
-        public MapReduce()
+        public Dictionary<KReduce, VReduce> KeyValDictionary { get { return output; } }
+
+        public MapReduce() : this(new DefaultCSVRetriever()) { }
+
+        public MapReduce(IRetriever _Retriever)
         {
+            retriever = _Retriever;
             intermediate = new Dictionary<KMap, List<VMap>>();
             output = new Dictionary<KReduce, VReduce>();
         }
@@ -22,20 +29,15 @@ namespace ToyMapReduce.MapReduce
         /// <param name="Key">Key for mapping</param>
         /// <param name="Value">Value for mapping</param>
         /// <returns>Returns true if the key doesn't exist and is adding, false otherwise</returns>
-        private bool addMap(KMap Key, VMap Value)
+        public void addMap(KMap Key, VMap Value)
         {
             if (!intermediate.ContainsKey(Key))
             {
                 List<VMap> ValueList = new List<VMap>();
                 ValueList.Add(Value);
                 intermediate.Add(Key, ValueList);
-                return false;
             }
-            else
-            {
-                intermediate[Key].Add(Value);
-                return true;
-            }
+            else { intermediate[Key].Add(Value); }
         }
 
         /// <summary>
@@ -43,7 +45,7 @@ namespace ToyMapReduce.MapReduce
         /// </summary>
         /// <param name="Key">Reduced key</param>
         /// <param name="Value">Reduced value</param>
-        private void addReduce(KReduce Key, VReduce Value )
+        public void addReduce(KReduce Key, VReduce Value )
         {
             output.Add(Key, Value);
         }
@@ -56,34 +58,16 @@ namespace ToyMapReduce.MapReduce
         {
             try
             {
-                StreamReader sr = new StreamReader(Path);
-                while (!sr.EndOfStream)
-                {
-                    KeyValuePair<KMap, VMap> KVMapPair = map(preprocess(sr.ReadLine()));
-                    addMap(KVMapPair.Key, KVMapPair.Value);
-                }
+                IEnumerable<KeyValuePair<object, object>> KVPCollection =
+                    (IEnumerable<KeyValuePair<object, object>>)retriever.Retrieve(Path);
+                foreach (KeyValuePair<object, object> KVP in KVPCollection) map(KVP);
+                foreach (KeyValuePair<KMap, List<VMap>> KVPair in intermediate) reduce(KVPair.Key, KVPair.Value);
             }
             catch (Exception e) { Console.WriteLine(e.Message); }
-
-            foreach (KeyValuePair<KMap, List<VMap>> KVPair in intermediate)
-            {
-                KeyValuePair<KReduce, VReduce> KVReducePair = reduce(KVPair.Key, KVPair.Value);
-                addReduce(KVReducePair.Key, KVReducePair.Value);
-            }
         }
 
-        public Dictionary<KReduce, VReduce> KeyValDictionary
-        {
-            get { return output; }
-        }
+        abstract public void map(KeyValuePair<object, object> KVPair);
 
-        /// <summary>
-        /// Preprocessing data
-        /// </summary>
-        /// <param name="data">String data</param>
-        /// <returns>Returns KeyValuePair, where key is the first column of data and value is next columns</returns>
-        abstract public KeyValuePair<object, object> preprocess(string data);
-        abstract public KeyValuePair<KMap, VMap> map(KeyValuePair<object, object> KVPair);
-        abstract public KeyValuePair<KReduce, VReduce> reduce(KMap Key, List<VMap> Values);
+        abstract public void reduce(KMap Key, List<VMap> Values);
     }
 }
