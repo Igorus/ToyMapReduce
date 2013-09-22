@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="examples\PiEstimation.cs" />
     <Compile Include="examples\TrimUnique.cs" />
     <Compile Include="examples\WineAcidity.cs" />
     <Compile Include="MapReduce\DefaultCSVRetriever.cs" />

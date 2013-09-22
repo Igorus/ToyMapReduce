@@ -22,6 +22,12 @@ namespace ToyMapReduce
             foreach (KeyValuePair<int, double> KVPair in RedWine.KeyValDictionary)
                 Console.WriteLine(KVPair.Key + ": " + KVPair.Value.ToString());
             Console.ReadLine();
+
+            PiEstimation PiEstimator = new PiEstimation();
+            PiEstimator.execute(1000000);
+            foreach (KeyValuePair<string, double> KVPair in PiEstimator.KeyValDictionary)
+                Console.WriteLine(KVPair.Key + ": " + KVPair.Value.ToString());
+            Console.ReadLine();
         }
     }
 }
