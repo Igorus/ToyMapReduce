@@ -29,7 +29,7 @@ namespace ToyMapReduce.MapReduce
         /// <param name="Key">Key for mapping</param>
         /// <param name="Value">Value for mapping</param>
         /// <returns>Returns true if the key doesn't exist and is adding, false otherwise</returns>
-        public void addMap(KMap Key, VMap Value)
+        public void emitIntermediate(KMap Key, VMap Value)
         {
             if (!intermediate.ContainsKey(Key))
             {
@@ -45,7 +45,7 @@ namespace ToyMapReduce.MapReduce
         /// </summary>
         /// <param name="Key">Reduced key</param>
         /// <param name="Value">Reduced value</param>
-        public void addReduce(KReduce Key, VReduce Value )
+        public void emit(KReduce Key, VReduce Value )
         {
             output.Add(Key, Value);
         }

@@ -11,7 +11,7 @@ namespace ToyMapReduce.examples
 
         public override void map(KeyValuePair<object, object> KVPair)
         {
-            addMap((int)KVPair.Key, (double)KVPair.Value);
+            emitIntermediate((int)KVPair.Key, (double)KVPair.Value);
         }
 
         public override void reduce(int Key, List<double> Values)
@@ -19,7 +19,7 @@ namespace ToyMapReduce.examples
             double summ = 0;
             foreach (double s in Values) summ += s;
             summ /= Values.Count;
-            addReduce(Key, summ);
+            emit(Key, summ);
         }
     }
 
