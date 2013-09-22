@@ -25,9 +25,9 @@ namespace ToyMapReduce.examples
 
     sealed class CustomCSVRetriever : IRetriever
     { 
-        public IEnumerable<KeyValuePair<object, object>> Retrieve(string Path)
+        public IEnumerable<KeyValuePair<object, object>> Retrieve(object Path)
         {
-            StreamReader sr = new StreamReader(Path);
+            StreamReader sr = new StreamReader((string)Path);
             sr.ReadLine();
             while (!sr.EndOfStream)
             {

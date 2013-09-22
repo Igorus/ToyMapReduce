@@ -5,6 +5,6 @@ namespace ToyMapReduce.MapReduce
 {
     interface IRetriever
     {
-        IEnumerable<KeyValuePair<object, object>> Retrieve(string Path);
+        IEnumerable<KeyValuePair<object, object>> Retrieve(object RetrieverData);
     }
 }

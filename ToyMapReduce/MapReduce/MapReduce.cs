@@ -54,12 +54,12 @@ namespace ToyMapReduce.MapReduce
         /// Execute MapReduce
         /// </summary>
         /// <param name="Path">File path of input data</param>
-        public void execute(String Path)
+        public void execute(object RetrieverData)
         {
             try
             {
                 IEnumerable<KeyValuePair<object, object>> KVPCollection =
-                    (IEnumerable<KeyValuePair<object, object>>)retriever.Retrieve(Path);
+                    (IEnumerable<KeyValuePair<object, object>>)retriever.Retrieve(RetrieverData);
                 foreach (KeyValuePair<object, object> KVP in KVPCollection) map(KVP);
                 foreach (KeyValuePair<KMap, List<VMap>> KVPair in intermediate) reduce(KVPair.Key, KVPair.Value);
             }
