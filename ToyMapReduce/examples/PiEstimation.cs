@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using ToyMapReduce.MapReduce;
 
 namespace ToyMapReduce.examples
@@ -10,11 +11,11 @@ namespace ToyMapReduce.examples
     {
         public PiEstimation() : base(new RandomRetriever()) { }
 
+        Func<double, double, double> sqrDistance = (x, y) => x * x + y * y;
         public override void map(KeyValuePair<object, object> KVPair)
         {
-            int isCircle;
-            if (Math.Pow((double)KVPair.Key, 2) + Math.Pow((double)KVPair.Value, 2) <= 1) isCircle = 1; else isCircle = 0;
-            emitIntermediate("circle", isCircle);
+            if (sqrDistance((double)KVPair.Key, (double)KVPair.Value) <= 1) { emitIntermediate("circle", 1); }
+            else { emitIntermediate("circle", 0); }
         }
 
         public override void reduce(string Key, List<int> Values)

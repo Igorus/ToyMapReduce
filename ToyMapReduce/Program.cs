@@ -24,7 +24,7 @@ namespace ToyMapReduce
             Console.ReadLine();
 
             PiEstimation PiEstimator = new PiEstimation();
-            PiEstimator.execute(1000000);
+            PiEstimator.execute(5000000);
             foreach (KeyValuePair<string, double> KVPair in PiEstimator.KeyValDictionary)
                 Console.WriteLine(KVPair.Key + ": " + KVPair.Value.ToString());
             Console.ReadLine();
